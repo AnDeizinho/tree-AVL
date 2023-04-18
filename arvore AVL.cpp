@@ -1,20 +1,11 @@
-//
-//# include "lista.h"
-//
-//int main()
-//{
-//	struct item* item = newItem("andrey");
-//	inserir(item, "costa");
-//	inserir(item, "queiroz");
-//	inserir(item, "zemblergumanbarquer");
-//	listar(item);
-//	system("pause");
-//}
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 
+// function prototype
+struct node* deletar(struct node* no, int valor);
+
+//basic struture
 struct node {
     int valor;
     struct node* esq;
@@ -22,30 +13,12 @@ struct node {
     int altura;
 };
 
-//// Funções auxiliares
-//int max(int a, int b);
-//int altura(No* no);
-//int fatorBalanceamento(No* no);
-//
-//// Funções de rotação
-//No* rotacaoDireita(No* y);
-//No* rotacaoEsquerda(No* x);
-//No* rotacaoDireitaEsquerda(No* z);
-//No* rotacaoEsquerdaDireita(No* z);
-//
-//// Funções do CRUD
-//No* criarNo(int valor);
-//No* inserir(No* no, int valor);
-//No* buscar(No* no, int valor);
-//No* atualizar(No* no, int valorAntigo, int valorNovo);
-struct node* deletar(struct node* no, int valor);
-//void listar(No* no);
-
-
+// return max value beetween a and b parameter
 int max(int a, int b) {
     return (a > b) ? a : b;
 }
 
+// get the height
 int altura(struct node* no) {
     if (no == NULL) {
         return 0;
@@ -53,6 +26,7 @@ int altura(struct node* no) {
     return no->altura;
 }
 
+// factor balance
 int fatorBalanceamento(struct node* no) {
     if (no == NULL) {
         return 0;
@@ -60,6 +34,7 @@ int fatorBalanceamento(struct node* no) {
     return altura(no->esq) - altura(no->dir);
 }
 
+// rotation to the right
 struct node* rotacaoDireita(struct node* y) {
     struct node* x = y->esq;
     struct node* t2 = x->dir;
@@ -73,6 +48,7 @@ return x;
 
 }
 
+// rotation to the left
 struct node* rotacaoEsquerda(struct node* x) {
 	struct node* y = x->dir;
 	struct node* t2 = y->esq;
@@ -87,16 +63,19 @@ struct node* rotacaoEsquerda(struct node* x) {
 
 }
 
+// rotation right and left
 struct node* rotacaoDireitaEsquerda(struct node* z) {
 	z->esq = rotacaoEsquerda(z->esq);
 	return rotacaoDireita(z);
 }
 
+// rotation left and right
 struct node* rotacaoEsquerdaDireita(struct node* z) {
 	z->dir = rotacaoDireita(z->dir);
 	return rotacaoEsquerda(z);
 }
 
+// make a new node
 struct node* criarNo(int valor) {
 	struct node* novoNo = (struct node*) malloc(sizeof(struct node));
 	novoNo->valor = valor;
@@ -106,6 +85,7 @@ struct node* criarNo(int valor) {
 	return novoNo;
 }
 
+// insert new node on the tree AVL
 struct node* inserir(struct node* no, int valor) {
 	if (no == NULL) {
 	return criarNo(valor);
@@ -117,7 +97,7 @@ struct node* inserir(struct node* no, int valor) {
 	} else if (valor > no->valor) {
 		no->dir = inserir(no->dir, valor);
 	} else {
-		// valor já existe na árvore
+		// value already on the tree
 		return no;
 	}
 
@@ -143,6 +123,7 @@ struct node* inserir(struct node* no, int valor) {
  
 }
 
+// search value on the tree
 struct node* buscar(struct node* no, int valor) {
 	if (no == NULL || no->valor == valor) {
 		return no;
@@ -153,12 +134,14 @@ struct node* buscar(struct node* no, int valor) {
 	return buscar(no->dir, valor);
 }
 
+// update value on the tree
 struct node* atualizar(struct node* no, int valorAntigo, int valorNovo) {
 	no = deletar(no, valorAntigo);
 	no = inserir(no, valorNovo);
 	return no;
 }
 
+// get min node
 struct node* minimo(struct node* no) {
     if (no == NULL) {
         return NULL;
@@ -170,7 +153,7 @@ struct node* minimo(struct node* no) {
     return iterator;
 }
 
-
+// remove value 
 struct node* deletar(struct node* no, int valor) {
 	if (no == NULL) {
 	return no;
@@ -224,7 +207,7 @@ struct node* deletar(struct node* no, int valor) {
 	return no;
 
 }
-
+// print all nodes in terminal screen
 void listar(struct node* no) {
 	if (no != NULL) {
 	listar(no->esq);
@@ -232,49 +215,12 @@ void listar(struct node* no) {
 	listar(no->dir);
 	}
 }
-
+// main function
 int main() {
     struct node* raiz = NULL;
 
-    //// Inserção de dados
-    //raiz = inserir(raiz, 10);
-    //raiz = inserir(raiz, 20);
-    //raiz = inserir(raiz, 30);
-    //raiz = inserir(raiz, 40);
-    //raiz = inserir(raiz, 50);
-    //raiz = inserir(raiz, 25);
-
-    //// Listagem de dados
-    //printf("Dados na arvore: ");
-    //listar(raiz);
-    //printf("\n");
-
-    //// Busca de um dado
-    //int valorBusca = 30;
-    //No* noBusca = buscar(raiz, valorBusca);
-    //if (noBusca == NULL) {
-    //    printf("%d nao encontrado na arvore.\n", valorBusca);
-    //} else {
-    //    printf("%d encontrado na arvore.\n", noBusca->valor);
-    //}
-
-    //// Atualização de um dado
-    //int valorAntigo = 30;
-    //int valorNovo = 35;
-    //raiz = atualizar(raiz, valorAntigo, valorNovo);
-    //printf("Dados na arvore apos atualizacao: ");
-    //listar(raiz);
-    //printf("\n");
-
-    //// Deleção de um dado
-    //int valorDeletar = 35;
-    //raiz = deletar(raiz, valorDeletar);
-    //printf("Dados na arvore apos delecao: ");
-    //listar(raiz);
-    //printf("\n");
-
 	int opcao, valor, valorAntigo;
-
+	// user interaction for test the tree AVL structure
 	do {
 		printf("\nEscolha uma opcao:\n");
 		printf("1 - Inserir valor\n");
@@ -340,7 +286,3 @@ int main() {
 
 
 }
-
-
-
-
